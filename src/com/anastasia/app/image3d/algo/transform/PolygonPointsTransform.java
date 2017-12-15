@@ -5,7 +5,7 @@ import com.anastasia.app.image3d.algo.Polygon;
 
 public abstract class PolygonPointsTransform implements PolygonsTransform {
 
-    public static PolygonPointsTransform withChain(AffineTransform... affineTransforms) {
+    static PolygonPointsTransform withChain(AffineTransform... affineTransforms) {
         AffineTransform transform = AffineTransforms.chain(affineTransforms);
         return with(transform);
     }

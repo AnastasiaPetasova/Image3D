@@ -2,16 +2,18 @@ package com.anastasia.app.image3d.algo.transform;
 
 public class AffineTransforms {
 
-    public final static int X = 0, Y = 1, Z = 2, ONE = 3;
-    public final static int X_AXIS = (1 << X), Y_AXIS = (1 << Y), Z_AXIS = (1 << Z);
+    final static int X = 0, Y = 1, Z = 2;
 
-    public static double[][] createMatrix() {
+    private final static int ONE = 3;
+    final static int X_AXIS = (1 << X), Y_AXIS = (1 << Y), Z_AXIS = (1 << Z);
+
+    private static double[][] createMatrix() {
         double[][] matrix = new double[4][4];
         matrix[ONE][ONE] = 1;
         return matrix;
     }
 
-    public static AffineTransform equal() {
+    private static AffineTransform equal() {
         return reorder(X, Y, Z);
     }
 
@@ -30,7 +32,7 @@ public class AffineTransforms {
             matrix[i][i] = 1;
         }
 
-        int minBit = 4, maxBit = 0;
+        int minBit, maxBit;
         switch (type) {
             case X_AXIS + Y_AXIS:
                 minBit = X;
@@ -57,7 +59,7 @@ public class AffineTransforms {
         return new AffineTransform(matrix);
     }
 
-    public static AffineTransform reorder(int newX, int newY, int newZ) {
+    static AffineTransform reorder(int newX, int newY, int newZ) {
         double[][] matrix = createMatrix();
 
         matrix[X][newX] = 1;

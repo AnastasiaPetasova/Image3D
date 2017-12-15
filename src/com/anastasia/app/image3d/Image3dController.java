@@ -1,38 +1,26 @@
 package com.anastasia.app.image3d;
 
-import com.anastasia.app.image3d.algo.*;
+import com.anastasia.app.image3d.algo.Point3D;
+import com.anastasia.app.image3d.algo.Polygon;
 import com.anastasia.app.image3d.algo.transform.*;
 import com.anastasia.app.image3d.algo.triangulation.Figure3D;
 import com.anastasia.app.image3d.algo.triangulation.Figures;
 import com.anastasia.app.image3d.algo.triangulation.Polygonization;
-import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Image3dController implements Initializable {
     @FXML
     Canvas imageCanvas;
-
-    @FXML
-    TextField parametersTextField;
-
-    @FXML
-    Button drawImageButton;
 
     @FXML
     Button startRotateClockwiseButton;
@@ -48,15 +36,6 @@ public class Image3dController implements Initializable {
 
     @FXML
     Button zoomOutButton;
-
-    private void showExceptionMessage(Exception e) {
-        showMessage(e.getLocalizedMessage(), Alert.AlertType.ERROR);
-    }
-
-    private void showMessage(String message, Alert.AlertType type) {
-        Alert alert = new Alert(type, message, ButtonType.OK);
-        alert.show();
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -88,23 +67,8 @@ public class Image3dController implements Initializable {
 
     }
 
-    private String[] extractParameters() {
-        String parameterString = parametersTextField.getText();
-        if (parameterString == null) return new String[0];
-
-        return parameterString.trim().split(" ");
-    }
-
     private double extractRadius() {
         return 1000;
-//        String[] parameters = extractParameters();
-//        if (parameters.length == 0) return 0;
-//
-//        try {
-//            return Double.parseDouble(parameters[0]);
-//        } catch (NumberFormatException e) {
-//            return 0;
-//        }
     }
 
     private PolygonPointsTransform with(PointTransform pointTransform) {
@@ -227,13 +191,11 @@ public class Image3dController implements Initializable {
         double centerX = imageCanvas.getWidth() / 2;
         double centerY = imageCanvas.getHeight() / 2;
 
-        AffineTransform centeredZoom = AffineTransforms.chain(
+        return AffineTransforms.chain(
                 AffineTransforms.shift(-centerX, -centerY, 0),
                 AffineTransforms.zoom(zoomCoeff, zoomCoeff, 0),
                 AffineTransforms.shift(centerX, centerY, 0)
         );
-
-        return centeredZoom;
     }
 
     private void drawImage(Polygon[] polygons) {

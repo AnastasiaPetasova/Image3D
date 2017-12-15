@@ -12,8 +12,6 @@ import java.io.IOException;
 
 public class Image3dApplication extends Application {
 
-    volatile static boolean appIsAlive = true;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
         initScene(primaryStage);
@@ -31,8 +29,6 @@ public class Image3dApplication extends Application {
         );
 
         primaryStage.setOnCloseRequest(event -> {
-            appIsAlive = false;
-
             Platform.exit();
             System.exit(0);
         });

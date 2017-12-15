@@ -4,7 +4,7 @@ import com.anastasia.app.image3d.algo.Point3D;
 
 public class AffineTransform implements PointTransform {
 
-    double[][] matrix;
+    private double[][] matrix;
 
     AffineTransform(double[][] matrix) {
         this.matrix = matrix;
@@ -25,7 +25,7 @@ public class AffineTransform implements PointTransform {
         return new Point3D(res);
     }
 
-    public AffineTransform chainAfter(AffineTransform other) {
+    AffineTransform chainAfter(AffineTransform other) {
         double[][] resMatrix = new double[4][4];
 
         double[][] thisMatrix = this.matrix;
