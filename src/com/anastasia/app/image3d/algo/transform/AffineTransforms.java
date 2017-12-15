@@ -2,10 +2,8 @@ package com.anastasia.app.image3d.algo.transform;
 
 public class AffineTransforms {
 
-    final static int X = 0, Y = 1, Z = 2;
-
-    private final static int ONE = 3;
-    final static int X_AXIS = (1 << X), Y_AXIS = (1 << Y), Z_AXIS = (1 << Z);
+    public final static int X = 0, Y = 1, Z = 2, ONE = 3;
+    public final static int X_AXIS = (1 << X), Y_AXIS = (1 << Y), Z_AXIS = (1 << Z);
 
     private static double[][] createMatrix() {
         double[][] matrix = new double[4][4];
