@@ -1,7 +1,7 @@
 package com.anastasia.app.image3d.algo.triangulation;
 
 import com.anastasia.app.image3d.algo.Point3D;
-import com.anastasia.app.image3d.algo.Triangle;
+import com.anastasia.app.image3d.algo.Polygon;
 
 public interface Figure3D {
 
@@ -12,7 +12,7 @@ public interface Figure3D {
 
     interface TriangulationFilter {
 
-        boolean accept(Triangle triangle);
+        boolean accept(Polygon polygon);
     }
 
     PointGenerator generator();

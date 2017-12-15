@@ -4,7 +4,7 @@ import com.anastasia.app.image3d.algo.*;
 import com.anastasia.app.image3d.algo.transform.*;
 import com.anastasia.app.image3d.algo.triangulation.Figure3D;
 import com.anastasia.app.image3d.algo.triangulation.Figures;
-import com.anastasia.app.image3d.algo.triangulation.Triangulation;
+import com.anastasia.app.image3d.algo.triangulation.Polygonization;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -103,11 +103,11 @@ public class Image3dController implements Initializable {
 //        }
     }
 
-    private TrianglePointsTransform with(PointTransform pointTransform) {
-        return TrianglePointsTransform.with(pointTransform);
+    private PolygonPointsTransform with(PointTransform pointTransform) {
+        return PolygonPointsTransform.with(pointTransform);
     }
 
-    private Triangle[] prepareToDraw(Triangle[] triangles) {
+    private Polygon[] prepareToDraw(Polygon[] polygons) {
 
         AffineTransform rotateXZ = AffineTransforms
                 .rotate(rotateAngle, AffineTransforms.X_AXIS + AffineTransforms.Z_AXIS);
@@ -116,7 +116,7 @@ public class Image3dController implements Initializable {
 
         AffineTransform centeredZoom = centeredZoomTranform();
 
-        TrianglesTransform[] transforms = {
+        PolygonsTransform[] transforms = {
                 with(rotateXZ),
                 Transforms.ACSONOMETRIC_TRANSFORM,
                 with(rotateXZ),
@@ -128,11 +128,11 @@ public class Image3dController implements Initializable {
                 with(centeredZoom)
         };
 
-        for (TrianglesTransform transform : transforms) {
-            triangles = transform.transform(triangles);
+        for (PolygonsTransform transform : transforms) {
+            polygons = transform.transform(polygons);
         }
 
-        return triangles;
+        return polygons;
     }
 
     /**
@@ -168,26 +168,26 @@ public class Image3dController implements Initializable {
         initZoomButtons();
     }
 
-    private TrianglePointsTransform screenTransform() {
+    private PolygonPointsTransform screenTransform() {
 
         double radius = extractRadius();
 
-        return new TrianglePointsTransform() {
+        return new PolygonPointsTransform() {
             @Override
-            protected PointTransform collectTransformInfo(Triangle[] triangles) {
+            protected PointTransform collectTransformInfo(Polygon[] polygons) {
                 double xMinScreen = Integer.MAX_VALUE;
                 double xMaxScreen = Integer.MIN_VALUE;
 
                 double yMinScreen = Integer.MAX_VALUE;
                 double yMaxScreen = Integer.MIN_VALUE;
 
-                for (Triangle triangle : triangles) {
-                    for (double x : triangle.xPoints()) {
+                for (Polygon polygon : polygons) {
+                    for (double x : polygon.xPoints()) {
                         xMinScreen = Math.min(xMinScreen, x);
                         xMaxScreen = Math.max(xMaxScreen, x);
                     }
 
-                    for (double y : triangle.yPoints()) {
+                    for (double y : polygon.yPoints()) {
                         yMinScreen = Math.min(yMinScreen, y);
                         yMaxScreen = Math.max(yMaxScreen, y);
                     }
@@ -232,7 +232,7 @@ public class Image3dController implements Initializable {
         return centeredZoom;
     }
 
-    private void drawImage(Triangle[] triangles) {
+    private void drawImage(Polygon[] polygons) {
         GraphicsContext graphicsContext = imageCanvas.getGraphicsContext2D();
 
         clearCanvas();
@@ -244,10 +244,10 @@ public class Image3dController implements Initializable {
 
         graphicsContext.setFill(Color.WHITE);
 
-        for (Triangle triangle : triangles) {
-            double[] xPoints = triangle.xPoints();
-            double[] yPoints = triangle.yPoints();
-            int n = 3;
+        for (Polygon polygon : polygons) {
+            double[] xPoints = polygon.xPoints();
+            double[] yPoints = polygon.yPoints();
+            int n = polygon.size();
 
             graphicsContext.strokePolygon(
                     xPoints, yPoints, n
@@ -265,9 +265,9 @@ public class Image3dController implements Initializable {
 
         int nAlpha = 40, nBeta = 20;
 
-        Triangle[] triangles = Triangulation.triangulation(radius, nAlpha, nBeta, figure);
-        triangles = prepareToDraw(triangles);
-        drawImage(triangles);
+        Polygon[] polygons = Polygonization.generate(radius, nAlpha, nBeta, figure);
+        polygons = prepareToDraw(polygons);
+        drawImage(polygons);
     }
 
     private void initDrawImageButton() {

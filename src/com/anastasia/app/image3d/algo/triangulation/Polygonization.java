@@ -1,15 +1,15 @@
 package com.anastasia.app.image3d.algo.triangulation;
 
 import com.anastasia.app.image3d.algo.Point3D;
-import com.anastasia.app.image3d.algo.Triangle;
+import com.anastasia.app.image3d.algo.Polygon;
 
 import java.util.*;
 
-public class Triangulation {
+public class Polygonization {
 
-    public static Triangle[] triangulation(double radius, int nAlpha, int nBeta, Figure3D figure) {
+    public static Polygon[] generate(double radius, int nAlpha, int nBeta, Figure3D figure) {
 
-        List<Triangle> triangles = new ArrayList<>();
+        List<Polygon> polygons = new ArrayList<>();
 
         double dAlpha = 2 * Math.PI / Math.max(nAlpha + 1, 1);
         double dBeta = Math.PI / Math.max(nBeta + 1, 1);
@@ -27,17 +27,13 @@ public class Triangulation {
                 Point3D c = generator.generate(radius, nextAlpha, nextBeta);
                 Point3D d = generator.generate(radius, nextAlpha, beta);
 
-                Rectangle rectangle = new Rectangle(a, b, c, d);
-
-                Triangle[] rectangleTriangles = rectangle.triangulation();
-                for (Triangle triangle : rectangleTriangles) {
-                    if (filter == null || filter.accept(triangle)) {
-                        triangles.add(triangle);
-                    }
+                Polygon polygon = new Polygon(a, b, c, d);
+                if (filter == null || filter.accept(polygon)) {
+                    polygons.add(polygon);
                 }
             }
         }
 
-        return triangles.toArray(new Triangle[0]);
+        return polygons.toArray(new Polygon[0]);
     }
 }

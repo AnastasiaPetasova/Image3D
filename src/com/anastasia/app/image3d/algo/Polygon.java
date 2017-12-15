@@ -1,18 +1,18 @@
 package com.anastasia.app.image3d.algo;
 
-public class Triangle {
+public class Polygon {
 
     public Point3D[] points;
-    double[] xPoints, yPoints, zPoints;
+    private double[] xPoints, yPoints, zPoints;
 
-    public Triangle(Point3D... points) {
+    public Polygon(Point3D... points) {
         this.points = points;
     }
 
     public double[] xPoints() {
         if (xPoints == null) {
-            xPoints = new double[3];
-            for (int i = 0; i < 3; ++i) {
+            xPoints = new double[size()];
+            for (int i = 0; i < xPoints.length; ++i) {
                 xPoints[i] = points[i].x;
             }
         }
@@ -22,8 +22,8 @@ public class Triangle {
 
     public double[] yPoints() {
         if (yPoints == null) {
-            yPoints = new double[3];
-            for (int i = 0; i < 3; ++i) {
+            yPoints = new double[size()];
+            for (int i = 0; i < yPoints.length; ++i) {
                 yPoints[i] = points[i].y;
             }
         }
@@ -33,12 +33,16 @@ public class Triangle {
 
     public double[] zPoints() {
         if (zPoints == null) {
-            zPoints = new double[3];
-            for (int i = 0; i < 3; ++i) {
+            zPoints = new double[size()];
+            for (int i = 0; i < zPoints.length; ++i) {
                 zPoints[i] = points[i].z;
             }
         }
 
         return zPoints;
+    }
+
+    public int size() {
+        return points.length;
     }
 }
