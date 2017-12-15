@@ -20,16 +20,7 @@ public interface Figures {
 
         @Override
         public TriangulationFilter filter() {
-            return triangle -> {
-                boolean negativeZ = false, positiveZ = false;
-                for (double z : triangle.zPoints()) {
-                    negativeZ |= z < 0;
-                    positiveZ |= z >= 0;
-                }
-
-                boolean accept = !(negativeZ && positiveZ);
-                return accept;
-            };
+            return null;
         }
     };
 }
