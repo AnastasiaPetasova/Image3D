@@ -5,6 +5,9 @@ import com.anastasia.app.image3d.algo.transform.*;
 import com.anastasia.app.image3d.algo.triangulation.Figure3D;
 import com.anastasia.app.image3d.algo.triangulation.Figures;
 import com.anastasia.app.image3d.algo.triangulation.Polygonization;
+import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -14,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -278,15 +282,13 @@ public class Image3dController implements Initializable {
     private volatile double rotateAngle = 0, deltaRotateAngle = 0;
     private volatile boolean rotating = false;
 
-    private void rotateImage() throws InterruptedException {
-        while (Image3dApplication.appIsAlive) {
-            while (rotating) {
-                drawImage();
+    private void rotateImage(){
+        if (rotating) {
+            drawImage();
 
-                Thread.sleep(500);
-
-                rotateAngle += deltaRotateAngle;
-            }
+            rotateAngle += deltaRotateAngle;
+            if (rotateAngle > 2 * Math.PI) rotateAngle -= 2 * Math.PI;
+            if (rotateAngle < 0) rotateAngle += 2 * Math.PI;
         }
     }
 
@@ -324,14 +326,13 @@ public class Image3dController implements Initializable {
     }
 
     private void initThreads() {
-        Thread rotateThread = new Thread(() -> {
-            try {
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
                 rotateImage();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        });
+        };
 
-        rotateThread.start();
+        timer.start();
     }
 }
