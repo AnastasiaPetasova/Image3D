@@ -57,8 +57,10 @@ public class Image3dController implements Initializable {
     private void initCanvas() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        imageCanvas.setWidth(screenSize.width / 2 - 100);
-        imageCanvas.setHeight(screenSize.height / 2  - 100);
+        int sizeCoeff = Image3dApplication.SIZE_COEFF;
+
+        imageCanvas.setWidth(screenSize.width * sizeCoeff / (sizeCoeff + 1) - 100);
+        imageCanvas.setHeight(screenSize.height * sizeCoeff / (sizeCoeff + 1) - 100);
 
         clearCanvas();
     }

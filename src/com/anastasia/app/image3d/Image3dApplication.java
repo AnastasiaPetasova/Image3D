@@ -12,6 +12,8 @@ import java.io.IOException;
 
 public class Image3dApplication extends Application {
 
+    final static int SIZE_COEFF = 2;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         initScene(primaryStage);
@@ -25,7 +27,10 @@ public class Image3dApplication extends Application {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         primaryStage.setScene(
-                new Scene(root, screenSize.width / 2, screenSize.height / 2)
+                new Scene(root,
+                        screenSize.width * SIZE_COEFF / (SIZE_COEFF + 1),
+                        screenSize.height * SIZE_COEFF / (SIZE_COEFF + 1)
+                )
         );
 
         primaryStage.setOnCloseRequest(event -> {
