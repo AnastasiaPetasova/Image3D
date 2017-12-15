@@ -30,8 +30,8 @@ public abstract class PolygonPointsTransform implements PolygonsTransform {
         for (int i = 0; i < polygons.length; ++i) {
             Polygon polygon = polygons[i];
 
-            Point3D[] resPoints = new Point3D[3];
-            for (int j = 0; j < 3; ++j) {
+            Point3D[] resPoints = new Point3D[polygon.size()];
+            for (int j = 0; j < resPoints.length; ++j) {
                 resPoints[j] = pointTransform.transform(polygon.points[j]);
             }
 
