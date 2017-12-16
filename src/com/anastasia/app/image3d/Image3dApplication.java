@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class Image3dApplication extends Application {
 
-    final static int SIZE_COEFF = 2;
+    final static int SIZE_COEFF = 3;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
